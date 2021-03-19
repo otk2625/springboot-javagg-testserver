@@ -4,11 +4,16 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 //import org.springframework.transaction.annotation.Transactional;
 
-import com.cos.javagg.model.ApiSummoner;
+import com.cos.javagg.model.api.ApiMatch;
+import com.cos.javagg.model.api.ApiMatchEntry;
+import com.cos.javagg.model.api.ApiSummoner;
+import com.cos.javagg.model.detail.Match;
 import com.google.gson.Gson;
 
 @Service
@@ -65,6 +70,88 @@ public class testService {
 		}
 
 		return null;
+	}
+	
+	//@Transactional
+	public ApiMatchEntry getApiMatchEntry(ApiSummoner dto, String apiKey) {
+		// 매치엔트리 가져오기
+		try {
+			URL url2 = new URL("https://kr.api.riotgames.com/lol/match/v4/matchlists/by-account/" + dto.getAccountId()
+					+ "?api_key=" + apiKey);
+
+			HttpURLConnection con = (HttpURLConnection) url2.openConnection();
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+
+			StringBuilder sb = new StringBuilder();
+
+			String input = "";
+			while ((input = br.readLine()) != null) {
+				sb.append(input);
+			}
+
+			Gson gson = new Gson();
+
+			ApiMatchEntry apiMatchEntry = gson.fromJson(sb.toString(), ApiMatchEntry.class);
+
+			if (apiMatchEntry == null) {
+				return null;
+			}
+
+			//게임 id값
+			for (Match match : apiMatchEntry.getMatches()) {
+				List<Long> matchIdList = new ArrayList<>();
+				matchIdList.add(match.getGameId());				
+			}
+
+			return apiMatchEntry;
+
+		} catch (Exception e) {
+
+			System.out.println("매치엔트리를 가져오지 못했습니다.");
+
+		}
+
+		return null;
+	}
+	
+	//@Transactional
+	public ApiMatch getApiMatch(long matchId, String apiKey) {
+
+		try {
+			// 매치 가져오기
+
+			URL url3 = new URL("https://kr.api.riotgames.com/lol/match/v4/matches/" + matchId + "?api_key=" + apiKey);
+
+			HttpURLConnection con = (HttpURLConnection) url3.openConnection();
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+
+			StringBuilder sb = new StringBuilder();
+
+			String input = "";
+			while ((input = br.readLine()) != null) {
+				sb.append(input);
+			}
+
+			Gson gson = new Gson();
+
+			// 매치 가져오기
+
+			ApiMatch apiMatch = gson.fromJson(sb.toString(), ApiMatch.class);
+
+			if (apiMatch == null) {
+				return null;
+			}
+
+			return apiMatch;
+
+		} catch (Exception e) {
+			System.out.println("경기를 가져오지 못했습니다.");
+		}
+
+		return null;
+
 	}
 
 }
