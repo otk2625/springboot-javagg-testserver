@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.cos.javagg.dto.CMRespDto;
 import com.cos.javagg.dto.LoLDto;
+import com.cos.javagg.model.api.ApiEntry;
 import com.cos.javagg.model.api.ApiMatch;
 import com.cos.javagg.model.api.ApiMatchEntry;
 import com.cos.javagg.model.api.ApiSummoner;
@@ -21,17 +23,20 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class testController{
 	private final testService testService;
-	private final String key = "RGAPI-eaf62d4b-d86c-4959-87cd-ca215e9822ce";	
+	private final String key = "RGAPI-98c0da64-8ab0-4059-9738-fda1b90b33a5";	
 	private ApiSummoner summoner;
 	private ApiMatchEntry apiMatchEntry;
 	private List<ApiMatch> apiMatch;
 	private List<Long> gameIdes;
+	private List<ApiEntry> apiEntries;
+	
 	    //소환사 이름 
-		@GetMapping("/info")
-		public CMRespDto<?> getByName() {
-			summoner = testService.getApiSummoner("태치야치", key);
+		@GetMapping("/info/{summonerName}")
+		public CMRespDto<?> getByName(@PathVariable String summonerName) {
+			summoner = testService.getApiSummoner(summonerName, key);
 			apiMatchEntry = testService.getApiMatchEntry(summoner, key);
-			 
+			apiEntries = testService.getApiEntry(summoner.getId(), key);
+			
 			gameIdes = new ArrayList<Long>();
 			apiMatch = new ArrayList<>();
 			
@@ -45,24 +50,28 @@ public class testController{
 			}
 			
 			//소환사 검색시 관련 데이터 전부
-			LoLDto dto = new LoLDto(summoner, apiMatchEntry, apiMatch);
+			LoLDto dto = new LoLDto(summoner, apiMatchEntry, apiMatch, apiEntries);
 
 			return new CMRespDto<>(1, dto);
 		}
 		
 		//matchs
-		@GetMapping("/match")
-		public CMRespDto<?> getMatchEntry() {
-			
-			return new CMRespDto<>(1, testService.getApiMatchEntry(summoner, key));
+		@GetMapping("/testenrty")
+		public CMRespDto<?> getEntry() {
+			List<ApiEntry> apiEntriess = testService.getApiEntry("6k1xdvcGVP140PTLZVLiJUa97A0lQK0j2b-7VeyowIjq3g", key);
+			System.out.println(apiEntriess.get(0));
+					
+			return new CMRespDto<>(1, apiEntriess);
 		}
 		
 		//match
-		@GetMapping("/match/{id}")
-		public CMRespDto<?> getMatch(@PathVariable Long id) {
+		@GetMapping("/match/{matchGameId}")
+		public CMRespDto<?> getMatchGameId(@PathVariable String  matchGameId) {
 					
-			return new CMRespDto<>(1, testService.getApiMatch(id, key));
+			return new CMRespDto<>(1, testService.getApiMatch(Long.parseLong(matchGameId), key));
 		}
+		
+		
 
 
 }

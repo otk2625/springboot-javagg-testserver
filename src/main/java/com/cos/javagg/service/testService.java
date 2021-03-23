@@ -2,6 +2,7 @@ package com.cos.javagg.service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -10,11 +11,17 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 //import org.springframework.transaction.annotation.Transactional;
 
+import com.cos.javagg.model.api.ApiEntry;
 import com.cos.javagg.model.api.ApiMatch;
 import com.cos.javagg.model.api.ApiMatchEntry;
 import com.cos.javagg.model.api.ApiSummoner;
+
 import com.cos.javagg.model.detail.Match;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+
+
 
 @Service
 public class testService {
@@ -153,5 +160,48 @@ public class testService {
 		return null;
 
 	}
+	
+	//@Transactional
+		public List<ApiEntry> getApiEntry(String userid, String apiKey) {
+
+			try {
+				// 엔트리 가져오기
+
+				URL url4 = new URL("https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/" + userid
+						+ "?api_key=" + apiKey);
+
+				HttpURLConnection con = (HttpURLConnection) url4.openConnection();
+
+				BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+
+				StringBuilder sb = new StringBuilder();
+
+				String input = "";
+				while ((input = br.readLine()) != null) {
+					sb.append(input);
+				}
+
+				Gson gson = new Gson();
+
+				Type listType = new TypeToken<ArrayList<ApiEntry>>() {
+				}.getType();
+
+				List<ApiEntry> apiEntries = gson.fromJson(sb.toString(), listType);
+
+				if (apiEntries == null) {
+					return null;
+				}
+
+				return apiEntries;
+
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+
+			return null;
+
+		}
+	
+
 
 }
