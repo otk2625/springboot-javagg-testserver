@@ -14,16 +14,16 @@ import com.cos.javagg.model.api.ApiMatch;
 import com.cos.javagg.model.api.ApiMatchEntry;
 import com.cos.javagg.model.api.ApiSummoner;
 import com.cos.javagg.model.detail.Match;
-import com.cos.javagg.service.testService;
+import com.cos.javagg.service.ApiService;
 
 import lombok.RequiredArgsConstructor;
 
 
 @RequiredArgsConstructor
 @RestController
-public class testController{
-	private final testService testService;
-	private final String key = "RGAPI-98c0da64-8ab0-4059-9738-fda1b90b33a5";	
+public class ApiController{
+	private final ApiService testService;
+	private final String key = "RGAPI-2915e588-651d-4f94-97c4-d81fecabb1d4";	
 	private ApiSummoner summoner;
 	private ApiMatchEntry apiMatchEntry;
 	private List<ApiMatch> apiMatch;
@@ -67,6 +67,12 @@ public class testController{
 		//match
 		@GetMapping("/match/{matchGameId}")
 		public CMRespDto<?> getMatchGameId(@PathVariable String  matchGameId) {
+					
+			return new CMRespDto<>(1, testService.getApiMatch(Long.parseLong(matchGameId), key));
+		}
+		
+		@GetMapping("/perkImage")
+		public CMRespDto<?> perkImage(@PathVariable String  matchGameId) {
 					
 			return new CMRespDto<>(1, testService.getApiMatch(Long.parseLong(matchGameId), key));
 		}

@@ -24,7 +24,7 @@ import com.google.gson.reflect.TypeToken;
 
 
 @Service
-public class testService {
+public class ApiService {
 
 	//@Transactional
 	public ApiSummoner getApiSummoner(String name, String apiKey) {
