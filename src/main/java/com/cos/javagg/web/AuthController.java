@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cos.javagg.dto.CMRespDto;
 import com.cos.javagg.model.user.User;
 import com.cos.javagg.service.UserService;
+import com.cos.javagg.web.dto.JoinDto;
 import com.cos.javagg.web.dto.LoginDto;
 
 import lombok.RequiredArgsConstructor;
@@ -38,4 +39,21 @@ public class AuthController {
 
         //return new CMRespDto<>(1, "성공");
 	}
+	
+	@PostMapping("/join")
+	public CMRespDto<?> join(@RequestBody JoinDto joinDto){
+		
+		User user = userService.join(joinDto);
+		
+		if(user == null) {
+			//아이디가 이미 존재
+			return new CMRespDto<>(-1, "이미 존재하는 아이디");
+		} else {
+			//성공
+			return new CMRespDto<>(1, "회원가입 성공");
+		}
+		 
+		
+	}
+	
 }

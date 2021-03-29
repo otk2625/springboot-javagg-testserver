@@ -9,6 +9,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -20,28 +21,29 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@NoArgsConstructor
-@Builder
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
+@Builder
 public class User {
 
-	@Id //PK
-	@GeneratedValue(strategy = GenerationType.IDENTITY) //Table, auto_increment, Sequence
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(length = 100, nullable = false) 
-	private String username;
-	@Column(length = 100, nullable = true) 
-	private String password;
-	@Column(length = 50, nullable = false)  
+	@Column(nullable = false, length = 100)
 	private String email;
+	
+	@Column(nullable = false, length = 100, unique = true)
+	private String username;
+	
+	@Lob
+	private String password;
 	
 	@Enumerated(EnumType.STRING)
 	private RoleType role; // ADMIN, USER
 	
-	@CreationTimestamp //값이 들어올때 자동으로 현재 시간이 들어감
-	private Timestamp createData;
-
+	@CreationTimestamp
+	private Timestamp createDate;
 }

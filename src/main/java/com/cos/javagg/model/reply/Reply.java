@@ -9,11 +9,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.cos.javagg.model.post.Post;
+import com.cos.javagg.model.board.Board;
 import com.cos.javagg.model.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -23,29 +24,30 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-@NoArgsConstructor
-@Builder
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
+@Builder
 public class Reply {
-	@Id //PK
-	@GeneratedValue(strategy = GenerationType.IDENTITY) //Table, auto_increment, Sequence
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(nullable = false, length = 200)
+	@Lob
 	private String content;
 	
-	//유저
-	@ManyToOne()
+	@ManyToOne 
 	@JoinColumn(name = "userId")
 	private User user;
 	
-	//게시물
-	@ManyToOne()
-	@JoinColumn(name = "postId")
-	private Post post;
+	@ManyToOne 
+	@JoinColumn(name = "boardId")
+	private Board board;
 	
-	@CreationTimestamp //값이 들어올때 자동으로 현재 시간이 들어감
-	private Timestamp createData;
+	private int likeCount;
+	
+	@CreationTimestamp
+	private Timestamp createDate;
 }
