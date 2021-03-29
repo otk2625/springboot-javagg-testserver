@@ -16,11 +16,13 @@ import lombok.NoArgsConstructor;
 public class BoardDto {
 	private String title;
 	private String content;
+	private String communityType;
 	
 	public Board toEntity() {
 		return Board.builder()
 				.title(title)
 				.content(content)
+				.communityType(communityType)
 				.build();
 	}
 }
