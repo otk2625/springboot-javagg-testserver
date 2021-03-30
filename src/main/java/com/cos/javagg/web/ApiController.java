@@ -33,7 +33,12 @@ public class ApiController{
 	    //소환사 이름 
 		@GetMapping("/info/{summonerName}")
 		public CMRespDto<?> getByName(@PathVariable String summonerName) {
-			summoner = testService.getApiSummoner(summonerName, key);
+			summoner = testService.getApiSummoner(summonerName.trim(), key);
+			
+			if(summoner == null) {
+				return new CMRespDto<>(-1, null);
+			}
+			
 			apiMatchEntry = testService.getApiMatchEntry(summoner, key);
 			apiEntries = testService.getApiEntry(summoner.getId(), key);
 			
@@ -51,6 +56,8 @@ public class ApiController{
 			
 			//소환사 검색시 관련 데이터 전부
 			LoLDto dto = new LoLDto(summoner, apiMatchEntry, apiMatch, apiEntries);
+			
+			
 
 			return new CMRespDto<>(1, dto);
 		}

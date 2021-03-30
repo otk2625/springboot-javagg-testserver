@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 //import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cos.javagg.model.api.ApiEntry;
 import com.cos.javagg.model.api.ApiMatch;
@@ -20,13 +21,10 @@ import com.cos.javagg.model.detail.Match;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-
-
-
 @Service
 public class ApiService {
 
-	//@Transactional
+	@Transactional
 	public ApiSummoner getApiSummoner(String name, String apiKey) {
 
 		try {
@@ -36,14 +34,15 @@ public class ApiService {
 
 			URL url = new URL(
 					"https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + name + "?api_key=" + apiKey);
-			
+
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
 			System.out.println("HttpURLConnection con = (HttpURLConnection) url.openConnection();");
-			
+
 			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
-			
-			System.out.println("BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), \"UTF-8\"));");
+
+			System.out.println(
+					"BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), \"UTF-8\"));");
 
 			StringBuilder sb = new StringBuilder();
 
@@ -51,15 +50,15 @@ public class ApiService {
 			while ((input = br.readLine()) != null) {
 				sb.append(input);
 			}
-			
+
 			System.out.println("StringBuilder sb = new StringBuilder();");
 
 			Gson gson = new Gson();
 
 			System.out.println("Gson gson = new Gson();");
-			
+
 			ApiSummoner apiSummoner = gson.fromJson(sb.toString(), ApiSummoner.class);
-			
+
 			System.out.println("apiSummoner 낫널");
 			if (apiSummoner == null) {
 				System.out.println("apiSummoner == null");
@@ -78,8 +77,8 @@ public class ApiService {
 
 		return null;
 	}
-	
-	//@Transactional
+
+	@Transactional
 	public ApiMatchEntry getApiMatchEntry(ApiSummoner dto, String apiKey) {
 		// 매치엔트리 가져오기
 		try {
@@ -105,10 +104,10 @@ public class ApiService {
 				return null;
 			}
 
-			//게임 id값
+			// 게임 id값
 			for (Match match : apiMatchEntry.getMatches()) {
 				List<Long> matchIdList = new ArrayList<>();
-				matchIdList.add(match.getGameId());				
+				matchIdList.add(match.getGameId());
 			}
 
 			return apiMatchEntry;
@@ -121,8 +120,8 @@ public class ApiService {
 
 		return null;
 	}
-	
-	//@Transactional
+
+	@Transactional
 	public ApiMatch getApiMatch(long matchId, String apiKey) {
 
 		try {
@@ -160,48 +159,46 @@ public class ApiService {
 		return null;
 
 	}
-	
-	//@Transactional
-		public List<ApiEntry> getApiEntry(String userid, String apiKey) {
 
-			try {
-				// 엔트리 가져오기
+	@Transactional
+	public List<ApiEntry> getApiEntry(String userid, String apiKey) {
 
-				URL url4 = new URL("https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/" + userid
-						+ "?api_key=" + apiKey);
+		try {
+			// 엔트리 가져오기
 
-				HttpURLConnection con = (HttpURLConnection) url4.openConnection();
+			URL url4 = new URL(
+					"https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/" + userid + "?api_key=" + apiKey);
 
-				BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+			HttpURLConnection con = (HttpURLConnection) url4.openConnection();
 
-				StringBuilder sb = new StringBuilder();
+			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
 
-				String input = "";
-				while ((input = br.readLine()) != null) {
-					sb.append(input);
-				}
+			StringBuilder sb = new StringBuilder();
 
-				Gson gson = new Gson();
-
-				Type listType = new TypeToken<ArrayList<ApiEntry>>() {
-				}.getType();
-
-				List<ApiEntry> apiEntries = gson.fromJson(sb.toString(), listType);
-
-				if (apiEntries == null) {
-					return null;
-				}
-
-				return apiEntries;
-
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
+			String input = "";
+			while ((input = br.readLine()) != null) {
+				sb.append(input);
 			}
 
-			return null;
+			Gson gson = new Gson();
 
+			Type listType = new TypeToken<ArrayList<ApiEntry>>() {
+			}.getType();
+
+			List<ApiEntry> apiEntries = gson.fromJson(sb.toString(), listType);
+
+			if (apiEntries == null) {
+				return null;
+			}
+
+			return apiEntries;
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
-	
 
+		return null;
+
+	}
 
 }

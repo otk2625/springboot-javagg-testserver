@@ -2,6 +2,7 @@ package com.cos.javagg.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cos.javagg.model.user.RoleType;
 import com.cos.javagg.model.user.User;
@@ -42,6 +43,7 @@ public class UserService {
 	
 
 
+	@Transactional
     public User registerUser(JoinDto dto) {
         User isUser = userRepository.findByUsername(dto.getUsername());
         
@@ -60,6 +62,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+	@Transactional(readOnly = true)
 	public User 로그인(LoginDto loginDto) {
 		 User user = userRepository.findByUsername(loginDto.getUsername());
 		 
