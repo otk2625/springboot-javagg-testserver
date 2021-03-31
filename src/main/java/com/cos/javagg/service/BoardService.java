@@ -65,4 +65,10 @@ public class BoardService {
 		
 		return board;
 	}
+
+	@Transactional(readOnly = true)
+	public Board 게시물한건(int boardId) {
+		
+		return postRepository.findById(boardId).get();
+	}
 }

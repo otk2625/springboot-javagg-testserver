@@ -23,7 +23,7 @@ public class ReplyService {
 	
 	
 	@Transactional
-	public void 댓글저장(ReplyDto replyDto) {
+	public Reply 댓글저장(ReplyDto replyDto) {
 		
 		User user = userRepository.findById(replyDto.getUserId()).get();
 		Board board = boardRepository.findById(replyDto.getBoardId()).get();
@@ -34,8 +34,15 @@ public class ReplyService {
 				.content(replyDto.getContent())
 				.build();
 		
-		replyRepository.save(reply);
+		return replyRepository.save(reply);
 		
+		
+	}
+
+
+	@Transactional
+	public void 댓글삭제(int id) {
+		replyRepository.deleteById(id);
 		
 	}
 
