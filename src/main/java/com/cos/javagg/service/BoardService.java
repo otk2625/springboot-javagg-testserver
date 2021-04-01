@@ -20,9 +20,9 @@ public class BoardService {
 	private final BoardRepository postRepository;
 
 	@Transactional(readOnly = true)
-	public List<Board> 게시물전체찾기() {
-
-		return postRepository.findAll();
+	public List<Board> 게시물전체찾기(int page) {
+		
+		return postRepository.findAllLimit(page);
 	}
 	
 	@Transactional

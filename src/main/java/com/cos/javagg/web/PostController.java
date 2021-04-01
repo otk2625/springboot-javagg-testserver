@@ -25,10 +25,10 @@ public class PostController {
 	private final BoardService boardService;
 	private final UserService userService;
 
-	@GetMapping("/board")
-	public CMRespDto<?> findAll() {
+	@GetMapping("/board/{page}")
+	public CMRespDto<?> findAll(@PathVariable int page) {
 
-		return new CMRespDto<>(1, boardService.게시물전체찾기());
+		return new CMRespDto<>(1, boardService.게시물전체찾기(page));
 	}
 
 	@PostMapping("/board/{id}")
