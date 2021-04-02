@@ -1,5 +1,8 @@
 package com.cos.javagg.service;
 
+import java.util.UUID;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +22,7 @@ public class UserService {
 	private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 	
+    @Transactional(readOnly = true)
 	public User login(LoginDto loginDto) {
 		
 		return userRepository.findByUsernameAndPassword(loginDto.getUsername(), loginDto.getPassword());
@@ -36,6 +40,7 @@ public class UserService {
 //		}
 //	}
 
+	@Transactional(readOnly = true)
 	public User 한놈찾기(int id) {
 	
 		return userRepository.findById(id).get();
@@ -66,11 +71,32 @@ public class UserService {
 	public User 로그인(LoginDto loginDto) {
 		 User user = userRepository.findByUsername(loginDto.getUsername());
 		 
+		 
+		 if(user != null) {
 		// ***** 패스워드값 확인 부분 ****
 	        if(!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())){
 	            return null;
 	        }
-	        
+		 }
+		return user;
+	}
+	
+	@Transactional(readOnly = true)
+	public User findByUsername(String username) {
+		
+		return userRepository.findByUsername(username);
+	}
+
+	public User 페이스북회원가입(User userEntity) {
+
+		UUID uuid = UUID.randomUUID();
+		String encPassword =new BCryptPasswordEncoder() 
+				.encode(uuid.toString());
+
+		userEntity.setPassword(encPassword);
+		
+		User user = userRepository.save(userEntity);
+		
 		return user;
 	}
 

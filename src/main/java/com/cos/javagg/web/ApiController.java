@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class ApiController{
 	private final ApiService testService;
-	private final String key = "RGAPI-c4d65a68-07ff-4867-b9ff-483b2b83c81b";	
+	private final String key = "RGAPI-c893a6ed-f0e8-4743-bfd1-e4c31fd23a8b";	
 	private ApiSummoner summoner;
 	private ApiMatchEntry apiMatchEntry;
 	private List<ApiMatch> apiMatch;

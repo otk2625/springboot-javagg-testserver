@@ -28,7 +28,13 @@ public class PostController {
 	@GetMapping("/board/{page}")
 	public CMRespDto<?> findAll(@PathVariable int page) {
 
-		return new CMRespDto<>(1, boardService.게시물전체찾기(page));
+		if(boardService.게시물전체찾기(page) == null) {
+			System.out.println("이거 널값임");
+			return new CMRespDto<>(-1 , null );
+		}else {
+			return new CMRespDto<>(1,boardService.게시물전체찾기(page) );
+		}
+		
 	}
 
 	@PostMapping("/board/{id}")

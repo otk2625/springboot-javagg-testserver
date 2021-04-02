@@ -23,6 +23,9 @@ import com.google.gson.reflect.TypeToken;
 
 @Service
 public class ApiService {
+	
+	//이거 소환사 모스트 뽑는거
+	//https://kr.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/"+encid+"?api_key="+api_key
 
 	@Transactional
 	public ApiSummoner getApiSummoner(String name, String apiKey) {
