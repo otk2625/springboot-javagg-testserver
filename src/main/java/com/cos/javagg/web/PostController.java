@@ -1,17 +1,21 @@
 package com.cos.javagg.web;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cos.javagg.dto.CMRespDto;
 import com.cos.javagg.model.board.Board;
 import com.cos.javagg.model.user.User;
 import com.cos.javagg.service.BoardService;
+import com.cos.javagg.service.LikesService;
 import com.cos.javagg.service.UserService;
 import com.cos.javagg.web.dto.BoardDto;
 import com.cos.javagg.web.dto.BoardUpdateDto;
@@ -24,15 +28,19 @@ public class PostController {
 
 	private final BoardService boardService;
 	private final UserService userService;
+	private final LikesService likesService;
+	
+	
 
 	@GetMapping("/board/{page}")
 	public CMRespDto<?> findAll(@PathVariable int page) {
-
 		if(boardService.게시물전체찾기(page) == null) {
-			System.out.println("이거 널값임");
+			System.out.println("게시물 없음");
 			return new CMRespDto<>(-1 , null );
 		}else {
-			return new CMRespDto<>(1,boardService.게시물전체찾기(page) );
+			List<Board> boards = boardService.게시물전체찾기(page);
+			
+			return new CMRespDto<>(1,boards);
 		}
 		
 	}
@@ -66,6 +74,7 @@ public class PostController {
 		return new CMRespDto<>(1, board);
 	}
 	
+	
 	@PutMapping("/board/count/{id}")
 	public CMRespDto<?> count(@PathVariable int id) {
 
@@ -84,4 +93,38 @@ public class PostController {
 		
 		return new CMRespDto<>(1, "성공");
 	}
+	
+	@PostMapping("/likes/{boardId}")
+	public CMRespDto<?> like(@PathVariable int boardId, @RequestBody int userId) {
+		
+		System.out.println("좋아요 됨");
+		
+		likesService.좋아요(boardId, userId);		
+		int likeId = likesService.likes찾기(boardId, userId);
+		return new CMRespDto<>(1,likeId);
+	}
+	
+	@DeleteMapping("/likes/{likesId}")
+	public  CMRespDto<?> unLike(@PathVariable int likesId) {
+		
+		System.out.println("좋아요 취소 됨 id는 : " + likesId);
+		
+		
+		
+		likesService.싫어요(likesId);		
+		
+		return new CMRespDto<>(1,"성공");
+	}
+	
+	@PostMapping("/likesId/{boardId}")
+	public  CMRespDto<?> findLikes(@PathVariable int boardId, @RequestBody int userId) {
+		
+		System.out.println("좋아요id 찾아");
+		
+		int likeId = likesService.likes찾기(boardId, userId);
+		
+		return new CMRespDto<>(1,likeId);
+	}
+	
+	
 }

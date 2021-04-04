@@ -63,7 +63,7 @@ public class AuthController {
 			
 			User registeredUser = userService.페이스북회원가입(UserEntity);
 			
-			return new CMRespDto<>(1, registeredUser);
+			return new CMRespDto<>(2, registeredUser);
 			
 		}else {
 			//로그인 진행

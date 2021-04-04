@@ -15,10 +15,12 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.cos.javagg.model.like.Likes;
 import com.cos.javagg.model.reply.Reply;
 import com.cos.javagg.model.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -43,7 +45,7 @@ public class Board {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private int id;
 	
 	private String communityType;
 	
@@ -67,6 +69,13 @@ public class Board {
 	@JsonIgnoreProperties({"board"})
 	@OrderBy("id desc")
 	private List<Reply> replys;
+	
+	@OneToMany(mappedBy = "board",  fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@JsonIgnoreProperties({"board"})
+	private List<Likes> likes; //A이미지에 홍길동, 장보고, 임꺽정 좋아요. (고소영)
+	
+	@Column(columnDefinition = "boolean default false") 
+	private boolean likeState;
 	
 	@CreationTimestamp
 	private Timestamp createDate;
