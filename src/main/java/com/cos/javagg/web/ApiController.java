@@ -12,7 +12,9 @@ import com.cos.javagg.dto.LoLDto;
 import com.cos.javagg.model.api.ApiEntry;
 import com.cos.javagg.model.api.ApiMatch;
 import com.cos.javagg.model.api.ApiMatchEntry;
+import com.cos.javagg.model.api.ApiRanking;
 import com.cos.javagg.model.api.ApiSummoner;
+import com.cos.javagg.model.detail.Entry;
 import com.cos.javagg.model.detail.Match;
 import com.cos.javagg.service.ApiService;
 
@@ -23,12 +25,14 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class ApiController{
 	private final ApiService testService;
-	private final String key = "RGAPI-c893a6ed-f0e8-4743-bfd1-e4c31fd23a8b";	
+	private final String key = "RGAPI-63fded23-7d47-4944-9d0d-e9cdf7f6ac76";	
 	private ApiSummoner summoner;
 	private ApiMatchEntry apiMatchEntry;
+	private ApiRanking apiRanking;
 	private List<ApiMatch> apiMatch;
 	private List<Long> gameIdes;
 	private List<ApiEntry> apiEntries;
+	private List<Entry> entries;
 	
 	    //소환사 이름 
 		@GetMapping("/info/{summonerName}")
@@ -46,7 +50,7 @@ public class ApiController{
 			apiMatch = new ArrayList<>();
 			
 			//게임id	
-			for(int i = 0; i< 20; i++) {
+			for(int i = 0; i< 30; i++) {
 				gameIdes.add(apiMatchEntry.getMatches().get(i).getGameId());
 			}
 			
@@ -62,7 +66,7 @@ public class ApiController{
 			return new CMRespDto<>(1, dto);
 		}
 		
-		//matchs
+		//matchs test
 		@GetMapping("/testenrty")
 		public CMRespDto<?> getEntry() {
 			List<ApiEntry> apiEntriess = testService.getApiEntry("6k1xdvcGVP140PTLZVLiJUa97A0lQK0j2b-7VeyowIjq3g", key);
@@ -82,6 +86,25 @@ public class ApiController{
 		public CMRespDto<?> perkImage(@PathVariable String  matchGameId) {
 					
 			return new CMRespDto<>(1, testService.getApiMatch(Long.parseLong(matchGameId), key));
+		}
+		
+		//소환사 이름 
+		@GetMapping("/rank")
+		public CMRespDto<?> ranking() {
+			
+			apiRanking = testService.getApiRanking(key);
+			
+
+			return new CMRespDto<>(1, apiRanking);
+		}
+		
+		//소환사 이름 
+		@GetMapping("/ranksummoner/{summonerName}")
+		public CMRespDto<?> findbyRank(@PathVariable String summonerName) {
+			
+			summoner = testService.getApiRankSummoner(summonerName.trim(), key);
+			
+			return new CMRespDto<>(1, summoner);
 		}
 		
 		
