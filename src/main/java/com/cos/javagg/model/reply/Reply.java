@@ -46,7 +46,7 @@ public class Reply {
 	@JoinColumn(name = "boardId")
 	private Board board;
 	
-	private int likeCount;
+	//private int likeCount;
 	
 	@CreationTimestamp
 	private Timestamp createDate;

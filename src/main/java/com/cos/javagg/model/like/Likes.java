@@ -54,6 +54,6 @@ public class Likes {
 	@CreationTimestamp
 	private Timestamp createDate;
 	
-	@Column(columnDefinition = "boolean default true") //일단 좋아요로 설정
-	private boolean isLike;
+//	@Column(columnDefinition = "boolean default true") //일단 좋아요로 설정
+//	private boolean isLike;
 }

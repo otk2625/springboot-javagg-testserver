@@ -70,11 +70,13 @@ public class Board {
 	@OrderBy("id desc")
 	private List<Reply> replys;
 	
+	private int replyCount;
+	
 	@OneToMany(mappedBy = "board",  fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties({"board"})
 	private List<Likes> likes; //A이미지에 홍길동, 장보고, 임꺽정 좋아요. (고소영)
 	
-	@Column(columnDefinition = "boolean default false") 
+	//@Column(columnDefinition = "boolean default false") 
 	private boolean likeState;
 	
 	@CreationTimestamp
