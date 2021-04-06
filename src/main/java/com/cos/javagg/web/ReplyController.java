@@ -31,8 +31,6 @@ public class ReplyController {
 		
 		Reply reply = replyService.댓글저장(replyDto);
 		
-		Board board = boardService.게시물한건(replyDto.getBoardId());
-		
 		return new CMRespDto<>(1, reply);
 	}
 	
