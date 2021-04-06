@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cos.javagg.dto.CMRespDto;
+import com.cos.javagg.model.user.RoleType;
 import com.cos.javagg.model.user.User;
 import com.cos.javagg.service.UserService;
 import com.cos.javagg.web.dto.FaceBookLoginDto;
@@ -59,6 +60,7 @@ public class AuthController {
 			User UserEntity = User.builder()
 					.username(username)
 					.email(faceBookLoginDto.getEmail())
+					.role(RoleType.USER)
 					.build();
 			
 			User registeredUser = userService.페이스북회원가입(UserEntity);

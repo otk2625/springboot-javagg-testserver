@@ -33,7 +33,7 @@ public class ReplyController {
 		
 		Board board = boardService.게시물한건(replyDto.getBoardId());
 		
-		return new CMRespDto<>(1, board);
+		return new CMRespDto<>(1, reply);
 	}
 	
 	@DeleteMapping("/reply/{id}")

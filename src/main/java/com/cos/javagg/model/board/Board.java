@@ -76,7 +76,7 @@ public class Board {
 	@JsonIgnoreProperties({"board"})
 	private List<Likes> likes; //A이미지에 홍길동, 장보고, 임꺽정 좋아요. (고소영)
 	
-	//@Column(columnDefinition = "boolean default false") 
+	@Column(columnDefinition = "boolean default false") 
 	private boolean likeState;
 	
 	@CreationTimestamp
